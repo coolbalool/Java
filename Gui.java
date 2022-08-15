@@ -2,7 +2,7 @@ import javax.swing.*;
 
 public class Gui {
 
-    public static void main(String[] args) 
+    public Gui()
     {
         // JFrame frame = new JFrame();
         // JPanel panel = new JPanel();    
