@@ -4,20 +4,17 @@ public class Gui {
 
     public Gui()
     {
-        // JFrame frame = new JFrame();
-        // JPanel panel = new JPanel();    
-        // panel.setBorder(BorderFactory.createEmptyBorder(30,30,30,30));
-        // panel.setLayout(new GridLayout(0,1));
-
-        JFrame f=new JFrame();//creating instance of JFrame  
+        JFrame frame = new JFrame();    //creating instance of JFrame  
+        JButton button =new JButton("click");   //creating instance of JButton  
+        button.setBounds(130,100,100, 40);  //x axis, y axis, width, height  
           
-JButton b=new JButton("click");//creating instance of JButton  
-b.setBounds(130,100,100, 40);//x axis, y axis, width, height  
+        frame.add(button);//adding button in JFrame  
           
-f.add(b);//adding button in JFrame  
-          
-f.setSize(400,500);//400 width and 500 height  
-f.setLayout(null);//using no layout managers  
-f.setVisible(true);//making the frame visible  
-    }
+    frame.setSize(400,500);//400 width and 500 height  
+    frame.setLayout(null);//using no layout managers  
+    frame.setVisible(true);//making the frame visible  
+    frame.setTitle("Theniggezx");
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    
+}
 }
