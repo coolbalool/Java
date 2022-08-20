@@ -1,19 +1,18 @@
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
+import javafx.event.ActionEvent;
 
 import java.awt.*;
 
 public class Gui implements ActionListener{
 
-        private boolean isLoginMode = true,ranLogin = false;
-
         private JFrame frame;
-        private JPanel panel,loginPanel;
-        private JButton loginButton,registerButton;
+        private JPanel panel,loginPanel,registerPanel;
+        private JButton loginButton,gRegisterButton;
         private JTextField userField;
         private JPasswordField passField;
-        private JLabel loginLabel,loginModeLabel;
+        private JLabel loginLabel;
         private String password,username;
         private CardLayout cl;
 
@@ -36,9 +35,11 @@ public class Gui implements ActionListener{
         panel.setLayout(cl);
 
       
-      loginPanel(true);
+      loginPanel();
+      registerPanel();
 
         panel.add(loginPanel,"login");
+        panel.add(registerPanel,"register");
         
 
         
@@ -46,29 +47,37 @@ public class Gui implements ActionListener{
         panel.updateUI();
     }
 
-    private void loginPanel(boolean changeTextMode)
+    private void registerPanel()
     {
-        
+      registerPanel = new JPanel(null);
+      registerPanel.setBackground(Color.gray);
+
+      JLabel userLabel = new JLabel("Username:");
+      JLabel passLabel = new JLabel("Password:");
+      userLabel.setBounds(10,20,70,50);
+      passLabel.setBounds(10,50,70,50);
+      userLabel.setForeground(Color.white);
+      passLabel.setForeground(Color.white);
+      registerPanel.add(userLabel);
+      registerPanel.add(passLabel);
+
+      JTextField userField = new JTextField(20);
+      JPasswordField passField = new JPasswordField(20);
+      userField.setBounds(80,35,170,20);
+      passField.setBounds(80,65,170,20);
+      registerPanel.add(userField);
+      registerPanel.add(passField);
+
+    }
+
+    private void loginPanel()
+    {
+
          JLabel userLabel;
          JLabel passLabel;
          
          loginPanel = new JPanel(null);
          loginPanel.setBackground(Color.gray);
-
-        if (changeTextMode && ranLogin) 
-        {
-          if (isLoginMode) 
-          loginModeLabel.setText("Type Username and Password to log in. Then click on login button");
-          else 
-          loginModeLabel.setText("Type Username and Password to register. then click on register button");
-          return;
-        }
-
-        else if (!ranLogin && changeTextMode)
-        {
-          loginPanel(false);
-          loginPanel(true);
-        }
 
       userLabel = new JLabel("Username:");
       userLabel.setBounds(10,20,70,50);
@@ -99,18 +108,12 @@ public class Gui implements ActionListener{
       loginPanel.add(loginButton);
       
 
-      registerButton = new JButton("Register");
-      registerButton.setBounds(150,100,100,30);
-      registerButton.addActionListener(this);
-      loginPanel.add(registerButton);
-
-      loginModeLabel = new JLabel("");
-      loginModeLabel.setBounds(80,150,200,20);
-      loginModeLabel.setForeground(Color.white);
-      loginPanel.add(loginModeLabel);
+      gRegisterButton = new JButton("Register");
+      gRegisterButton.setBounds(150,100,100,30);
+      gRegisterButton.addActionListener(this);
+      loginPanel.add(gRegisterButton);
 
       loginPanel.updateUI();
-      ranLogin = true;
     }
 
     @Override
@@ -118,25 +121,16 @@ public class Gui implements ActionListener{
     {
             if (e.getSource() == loginButton)
               {
-                loginPanel(true);
                 if (userField.getText().equals(username))
                 if (passField.getText().equals(password))
                 loginLabel.setText("Login successfully");
                 else loginLabel.setText("Username or password incorrect");
                 else loginLabel.setText("Username or password incorrect");
-                
               }
 
-            if (e.getSource() == registerButton)
+            if (e.getSource() == gRegisterButton)
             {
-              loginPanel(true);
-              if (isLoginMode) isLoginMode = false;
-              else 
-              {
-                username = userField.getText();
-                password = passField.getText();
-                isLoginMode = true;
-              }
+              cl.show(panel,"register");
             }
     }
     
