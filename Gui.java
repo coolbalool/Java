@@ -1,5 +1,8 @@
 
 import javax.swing.*;
+
+import javafx.event.ActionEvent;
+
 import java.awt.event.ActionListener;
 
 import java.awt.*;
@@ -14,7 +17,10 @@ public class Gui implements ActionListener{
         private JPasswordField passField;
         private JLabel loginLabel,loginModeLabel;
         private String password,username;
-        //********************************
+        // ticTacToe
+        private JPanel tPanel;
+        TicTacToe t;
+
         private JFrame frame;
         private JPanel panel;
         private CardLayout cl;
@@ -37,11 +43,50 @@ public class Gui implements ActionListener{
         frame.add(panel);
         panel.setLayout(cl);
 
+        t = new TicTacToe();
         loginPanel(true);
         panel.add(loginPanel,"login");
-        cl.show(panel,"login");
+        panel.add(tPanel,"ttt");
+        cl.show(panel,"ttt");
         panel.updateUI();
     }
+
+   public class TicTacToe implements ActionListener
+   {
+
+        private JButton[][] board;
+        private JButton exit;
+        private boolean tIsCross;
+
+    private TicTacToe()
+    {
+      tPanel = new JPanel(null);
+      tPanel.setBackground(Color.gray);
+      exit = new JButton("Exit");
+      exit.setBounds(400,100,75,50);
+      tPanel.add(exit);
+      board = new JButton[3][3];
+      for (int i = 0; i < board.length; i++)      
+        for (int j = 0;  j < board.length; j++)
+        {
+          board[i][j] = new JButton(i + " " + j);
+          board[i][j].setBounds(j * 100, i * 100 ,60,60);
+          tPanel.add(board[i][j]);
+        }
+  }
+
+  @Override
+  public void actionPerformed(java.awt.event.ActionEvent e) 
+  {
+   
+    if (e.getSource() == exit)
+    System.out.println("d");
+
+  }
+
+}
+    
+
 
     private void loginPanel(boolean changeTextMode)
     {
@@ -141,6 +186,8 @@ public class Gui implements ActionListener{
                 isLoginMode = true;
               }
             }
+
+           
     }
     
 }
