@@ -19,6 +19,7 @@ public class Gui implements ActionListener{
         private String password,username;
         // ticTacToe
         private JPanel tPanel;
+        private JButton tExit;
         TicTacToe t;
 
         private JFrame frame;
@@ -48,23 +49,24 @@ public class Gui implements ActionListener{
         panel.add(loginPanel,"login");
         panel.add(tPanel,"ttt");
         cl.show(panel,"ttt");
+        System.out.println("d");
         panel.updateUI();
     }
 
-   public class TicTacToe implements ActionListener
+   public class TicTacToe
    {
 
         private JButton[][] board;
-        private JButton exit;
+        
         private boolean tIsCross;
 
     private TicTacToe()
     {
       tPanel = new JPanel(null);
       tPanel.setBackground(Color.gray);
-      exit = new JButton("Exit");
-      exit.setBounds(400,100,75,50);
-      tPanel.add(exit);
+      tExit = new JButton("Exit");
+      tExit.setBounds(400,100,75,50);
+      tPanel.add(tExit);
       board = new JButton[3][3];
       for (int i = 0; i < board.length; i++)      
         for (int j = 0;  j < board.length; j++)
@@ -74,20 +76,8 @@ public class Gui implements ActionListener{
           tPanel.add(board[i][j]);
         }
   }
-
-  @Override
-  public void actionPerformed(java.awt.event.ActionEvent e) 
-  {
-   
-    if (e.getSource() == exit)
-    System.out.println("d");
-
-  }
-
 }
     
-
-
     private void loginPanel(boolean changeTextMode)
     {
         
@@ -187,7 +177,10 @@ public class Gui implements ActionListener{
               }
             }
 
-           
+           if (e.getSource() == tExit)
+           {
+            System.out.println("d");
+           }
     }
     
 }
