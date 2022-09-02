@@ -23,6 +23,7 @@ import java.awt.event.ActionListener;
     private JButton tExit;
     private JButton[][] board;
     private boolean tIsCross;
+    private int tMoves;
 
 
     private JFrame frame;
@@ -75,7 +76,7 @@ import java.awt.event.ActionListener;
     playerTxt.setBounds(400,50,70,70);
     tPanel.add(playerTxt);
     tIsCross = true;
-    
+    tMoves = 0;
     board = new JButton[3][3];
     for (int i = 0; i < board.length; i++)      
     for (int j = 0;  j < board.length; j++)
@@ -90,6 +91,12 @@ import java.awt.event.ActionListener;
 
     if(operation == "check")
     {
+        // tie checker
+      if (tMoves >= 9) 
+      {
+      }
+      if (tMoves < 5) return;
+ 
       String temp = "";
         for (int i = 0; i < board.length; i++)
         {
@@ -269,6 +276,8 @@ import java.awt.event.ActionListener;
         board[i][j].setText("X");
         else board[i][j].setText("O");
         tIsCross = !tIsCross;
+        tMoves++;
+        System.out.println(tMoves);
         ticTacToe("check");
       }
 
