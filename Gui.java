@@ -90,10 +90,46 @@ import java.awt.event.ActionListener;
 
     if(operation == "check")
     {
+      String temp = "";
         for (int i = 0; i < board.length; i++)
         {
-          
+          // row
+          if (board[i][0].getText() == "") continue;
+          temp = board[i][0].getText();
+          for(int j = 0;  j < board.length; j++)
+          {
+              if (!temp.equals(board[i][j].getText())) break;
+              if (j == board.length -1) System.out.println("d");
+            }
+
+            // col
+            if (board[0][i].getText() == "") continue;
+            temp = board[0][i].getText();
+            for(int j = 0;  j < board.length; j++)
+            {
+                if (!temp.equals(board[j][i].getText())) break;
+                if (j == board.length -1) System.out.println("d");
+              }
         }
+
+        // (0,0) mid
+        if (board[0][0].getText() == "") return;
+        temp = board[0][0].getText();
+        for (int i = 0;  i < board.length; i++)
+        {
+        if (!temp.equals(board[i][i].getText())) break;
+        if (i == board.length -1) System.out.println("d");
+        }
+
+        // other mid
+        if (board[0][board.length -1].getText() == "") return;
+        temp = board[0][board.length -1].getText();
+        for (int i = 0;  i < board.length; i++)
+        {
+        if (!temp.equals(board[i][board.length -i -1].getText())) break;
+        if (i == board.length -1) System.out.println("fasf");
+        }
+
     }
 
     }
@@ -218,7 +254,7 @@ import java.awt.event.ActionListener;
 
     if (e.getSource() == tExit)
     {
-      cl.show(panel,"login");
+      frame.dispose();
       return;
     }
 
