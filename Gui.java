@@ -94,7 +94,11 @@ import java.awt.event.ActionListener;
         // tie checker
       if (tMoves >= 9) 
       {
+        System.out.println("dasdASdasDASDASD");
+        return;
       }
+
+      // checks if the move count is too small for a win
       if (tMoves < 5) return;
  
       String temp = "";
@@ -106,7 +110,11 @@ import java.awt.event.ActionListener;
           for(int j = 0;  j < board.length; j++)
           {
               if (!temp.equals(board[i][j].getText())) break;
-              if (j == board.length -1) System.out.println("d");
+              if (j == board.length -1) 
+              {
+                System.out.println("d");
+                return;
+              }
             }
 
             // col
@@ -115,7 +123,11 @@ import java.awt.event.ActionListener;
             for(int j = 0;  j < board.length; j++)
             {
                 if (!temp.equals(board[j][i].getText())) break;
-                if (j == board.length -1) System.out.println("d");
+                if (j == board.length -1) 
+                {
+                  System.out.println("d");
+                  return;
+                }
               }
         }
 
@@ -125,7 +137,11 @@ import java.awt.event.ActionListener;
         for (int i = 0;  i < board.length; i++)
         {
         if (!temp.equals(board[i][i].getText())) break;
-        if (i == board.length -1) System.out.println("d");
+        if (i == board.length -1) 
+        {
+          System.out.println("d");
+          return;
+        }
         }
 
         // other mid
@@ -134,8 +150,11 @@ import java.awt.event.ActionListener;
         for (int i = 0;  i < board.length; i++)
         {
         if (!temp.equals(board[i][board.length -i -1].getText())) break;
-        if (i == board.length -1) System.out.println("fasf");
+        if (i == board.length -1) 
+        {
+        System.out.println("fasf");
         }
+      }
 
     }
 
@@ -277,7 +296,7 @@ import java.awt.event.ActionListener;
         else board[i][j].setText("O");
         tIsCross = !tIsCross;
         tMoves++;
-        System.out.println(tMoves);
+        //System.out.println(tMoves);
         ticTacToe("check");
       }
 
