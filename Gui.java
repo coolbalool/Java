@@ -24,6 +24,9 @@ import java.awt.event.ActionListener;
     private JButton[][] board;
     private boolean tIsCross;
     private int tMoves;
+    private JLabel tPlayerTxt;
+    private JLabel tWinnerText;
+    private String tWinner;
 
 
     private JFrame frame;
@@ -60,7 +63,8 @@ import java.awt.event.ActionListener;
     public void ticTacToe(String operation)
     {
 
-      
+     
+
     if (operation == null)
     {
     tPanel = new JPanel(null);
@@ -71,12 +75,19 @@ import java.awt.event.ActionListener;
     tExit.addActionListener(this);
     tPanel.add(tExit);
 
-    JLabel playerTxt = new JLabel("X:");
-    playerTxt.setForeground(Color.white);
-    playerTxt.setBounds(400,50,70,70);
-    tPanel.add(playerTxt);
+    tPlayerTxt = new JLabel("X:");
+    tPlayerTxt.setForeground(Color.white);
+    tPlayerTxt.setBounds(400,50,70,70);
+    tPanel.add(tPlayerTxt);
+
+    tWinnerText = new JLabel("");
+    tWinnerText.setForeground(Color.white);
+    tWinnerText.setBounds(310,130,130,70);
+    tPanel.add(tWinnerText);
+
     tIsCross = true;
     tMoves = 0;
+    tWinner = "";
     board = new JButton[3][3];
     for (int i = 0; i < board.length; i++)      
     for (int j = 0;  j < board.length; j++)
@@ -94,7 +105,8 @@ import java.awt.event.ActionListener;
         // tie checker
       if (tMoves >= 9) 
       {
-        System.out.println("dasdASdasDASDASD");
+        tWinner = "tie";
+        ticTacToe("go");
         return;
       }
 
@@ -112,7 +124,8 @@ import java.awt.event.ActionListener;
               if (!temp.equals(board[i][j].getText())) break;
               if (j == board.length -1) 
               {
-                System.out.println("d");
+                tWinner = temp;
+                ticTacToe("go");
                 return;
               }
             }
@@ -125,7 +138,8 @@ import java.awt.event.ActionListener;
                 if (!temp.equals(board[j][i].getText())) break;
                 if (j == board.length -1) 
                 {
-                  System.out.println("d");
+                  tWinner = temp;
+                  ticTacToe("go");
                   return;
                 }
               }
@@ -139,7 +153,8 @@ import java.awt.event.ActionListener;
         if (!temp.equals(board[i][i].getText())) break;
         if (i == board.length -1) 
         {
-          System.out.println("d");
+          tWinner = temp;
+          ticTacToe("go");
           return;
         }
         }
@@ -152,8 +167,25 @@ import java.awt.event.ActionListener;
         if (!temp.equals(board[i][board.length -i -1].getText())) break;
         if (i == board.length -1) 
         {
-        System.out.println("fasf");
+          tWinner = temp;
+          ticTacToe("go");
         }
+      }
+
+    }
+
+    if (operation == "go")
+    {
+      if (tWinner == "tie")
+      {
+        tWinnerText.setText("Game is a tie!");  
+        tPlayerTxt.setText("");
+      }
+
+      else if (tWinner == "X" || tWinner == "O")
+      {
+        tWinnerText.setText(tWinner + " is the winner!");
+        tPlayerTxt.setText("");
       }
 
     }
@@ -292,8 +324,16 @@ import java.awt.event.ActionListener;
         if (board[i][j].getText() == "")
         {
         if (tIsCross) 
-        board[i][j].setText("X");
-        else board[i][j].setText("O");
+        {
+          board[i][j].setText("X");
+          tPlayerTxt.setText("O:");
+        }
+        
+        else 
+        {
+          board[i][j].setText("O");
+          tPlayerTxt.setText("X:");
+        }
         tIsCross = !tIsCross;
         tMoves++;
         //System.out.println(tMoves);
