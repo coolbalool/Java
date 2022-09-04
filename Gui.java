@@ -27,6 +27,7 @@ import java.awt.event.ActionListener;
     private JLabel tPlayerTxt;
     private JLabel tWinnerText;
     private String tWinner;
+    private JButton tReset;
 
 
     private JFrame frame;
@@ -57,7 +58,6 @@ import java.awt.event.ActionListener;
     panel.add(loginPanel,"login");
     panel.add(tPanel,"ttt");
     cl.show(panel,"ttt");
-    panel.updateUI();
     }
 
     public void ticTacToe(String operation)
@@ -74,6 +74,12 @@ import java.awt.event.ActionListener;
     tExit.setBounds(400,100,75,50);
     tExit.addActionListener(this);
     tPanel.add(tExit);
+
+    tReset = new JButton("Reset");
+    tReset.setBounds(400,150,75,50);
+    tReset.addActionListener(this);
+    tReset.setVisible(false);
+    tPanel.add(tReset);
 
     tPlayerTxt = new JLabel("X:");
     tPlayerTxt.setForeground(Color.white);
@@ -96,7 +102,6 @@ import java.awt.event.ActionListener;
     board[i][j].setBounds(j * 100, i * 100 ,60,60);
     board[i][j].addActionListener(this);
     tPanel.add(board[i][j]);
-    
     }
     }
 
@@ -188,6 +193,12 @@ import java.awt.event.ActionListener;
         tPlayerTxt.setText("");
       }
 
+      ticTacToe("reset");
+    }
+
+    if (operation == "reset")
+    {
+      tReset.setVisible(true);
     }
 
     }
@@ -314,6 +325,12 @@ import java.awt.event.ActionListener;
     {
       frame.dispose();
       return;
+    }
+
+    if (e.getSource() == tReset)
+    {
+      System.out.println("ds");
+      ticTacToe(null);
     }
 
     for (int i = 0; i < board.length; i++)
