@@ -1,12 +1,9 @@
- // reset tic tac toe doesnt work; 
-    import javax.swing.*;
 
-    import javafx.event.ActionEvent;
+import javax.swing.*;
+import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
-
 import java.awt.event.ActionListener;
-
-    import java.awt.*;
+import java.awt.*;
 
     public class Gui implements ActionListener{
 
@@ -197,9 +194,7 @@ import java.awt.event.ActionListener;
     }
 
     if (operation == "reset")
-    {
       tReset.setVisible(true);
-    }
 
     }
 
@@ -329,8 +324,7 @@ import java.awt.event.ActionListener;
 
     if (e.getSource() == tReset)
     {
-      System.out.println("ds");
-      ticTacToe(null);
+      new Gui();
     }
 
     for (int i = 0; i < board.length; i++)
@@ -353,7 +347,6 @@ import java.awt.event.ActionListener;
         }
         tIsCross = !tIsCross;
         tMoves++;
-        //System.out.println(tMoves);
         ticTacToe("check");
       }
 
