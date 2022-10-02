@@ -113,7 +113,7 @@ import java.awt.*;
       }
 
       // checks if the move count is too small for a win
-      if (tMoves < 5) return;
+      if (tMoves < 4) return;
  
       String temp = "";
         for (int i = 0; i < board.length; i++)
@@ -131,7 +131,10 @@ import java.awt.*;
                 return;
               }
             }
+          }
 
+          for (int i = 0; i < board.length; i++)  
+          {
             // col
             if (board[0][i].getText() == "") continue;
             temp = board[0][i].getText();
@@ -145,7 +148,7 @@ import java.awt.*;
                   return;
                 }
               }
-        }
+            }
 
         // (0,0) mid
         if (board[0][0].getText() == "") return;
@@ -324,6 +327,7 @@ import java.awt.*;
 
     if (e.getSource() == tReset)
     {
+      frame.dispose();
       new Gui();
     }
 
