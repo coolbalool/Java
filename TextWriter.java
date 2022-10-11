@@ -7,6 +7,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.awt.event.ActionListener;
@@ -24,6 +28,9 @@ public class  TextWriter implements ActionListener
     private File f;
     private FileWriter fw;
 
+    /**
+     * 
+     */
     public TextWriter()
     {
     
@@ -126,9 +133,18 @@ public class  TextWriter implements ActionListener
 
         }
 
-    }
+        if (e.getSource() == newFBtn)
+        {
+        
+            if (fc.showOpenDialog(null) == 1)
+            System.out.println(fc.getSelectedFile().getAbsolutePath());
+
+        }   
 
     }
+
+
+}
 
 
 
