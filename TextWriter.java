@@ -1,22 +1,25 @@
 
-// add file browser
+// create a file with browser 
 // cntrl s save wwith indicator
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import java.io.File;
 import java.io.FileWriter;
 import java.awt.event.ActionListener;
+import java.util.Scanner;
 
-public class  TextWriter implements ActionListener 
+public class  TextWriter implements ActionListener
 {
     
     private JFrame frame;
     private JPanel panel;
-    private JButton applyBtn,resetBtn;
+    private JButton applyBtn,resetBtn,openFBtn,newFBtn;
     private JTextArea textArea;
+    private JFileChooser fc;
 
     private File f;
     private FileWriter fw;
@@ -32,6 +35,7 @@ public class  TextWriter implements ActionListener
         panel = new JPanel(null);
         frame.add(panel);
 
+        
         textArea = new JTextArea();
         textArea.setBounds(10,frame.getHeight() / 10,frame.getWidth(),frame.getHeight() - frame.getHeight() / 10);
         panel.add(textArea);
@@ -45,6 +49,18 @@ public class  TextWriter implements ActionListener
         resetBtn.setBounds(applyBtn.getX() + applyBtn.getWidth() + 10,0,80,frame.getHeight()/10);
         resetBtn.addActionListener(this);
         panel.add(resetBtn);
+
+        openFBtn = new JButton("Open");
+        openFBtn.setBounds(resetBtn.getX() + resetBtn.getWidth() + 10,0,80,frame.getHeight()/10);
+        openFBtn.addActionListener(this);
+        panel.add(openFBtn);
+
+        newFBtn = new JButton("New");
+        newFBtn.setBounds(openFBtn.getX() + openFBtn.getWidth() + 10,0,80,frame.getHeight()/10);
+        newFBtn.addActionListener(this);
+        panel.add(newFBtn);
+
+        fc = new JFileChooser();
 
         panel.updateUI();
     }
@@ -61,7 +77,25 @@ public class  TextWriter implements ActionListener
 
         catch(Exception e)
         {
-            return;
+            e.printStackTrace();
+        }
+
+    }
+
+    private void loadFile(File file)
+    {
+        try (Scanner in = new Scanner(file)) {
+            String text= "";
+            while(in.hasNextLine())
+                {
+                    text += in.nextLine();
+                    text += "\n";
+                }
+            textArea.setText(text);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
         }
 
     }
@@ -81,6 +115,20 @@ public class  TextWriter implements ActionListener
             textArea.setText(null);
         }
 
+        if (e.getSource() == openFBtn)
+        {
+            
+            if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+            {
+                f = fc.getSelectedFile();
+                loadFile(f);
+            }
+
+        }
+
     }
 
-}
+    }
+
+
+
