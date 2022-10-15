@@ -23,7 +23,7 @@ public class  TextWriter implements ActionListener
     
     public static void main(String[] args)
     {
-        TextWriter w = new TextWriter();
+        new TextWriter();
     }
 
     private JFrame frame;
