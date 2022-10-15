@@ -4,12 +4,14 @@
 // text color 
 // text font
 
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.Scanner;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -26,16 +28,17 @@ public class  TextWriter implements ActionListener
     private JButton applyBtn,resetBtn,openFBtn,newFBtn;
     private JTextArea textArea;
     private JFileChooser fc;
-    private JComboBox textSizeBox;
+    private JComboBox<String> textSizeBox;
+    private Component last;
 
     private File f;
     private FileWriter fw;
 
     private final String[] TEXT_SIZE = {"12","14","16","18","20","50"};
+    private final int[] DEF_BOUND = {-1,-1,-1,-1};
 
     public TextWriter()
     {
-
         frame = new JFrame("File Writer");
         frame.setSize(600,900);
         frame.setDefaultCloseOperation(3);
@@ -45,37 +48,51 @@ public class  TextWriter implements ActionListener
         frame.add(panel);
 
         textArea = new JTextArea();
-        textArea.setBounds(10,frame.getHeight() / 10,frame.getWidth(),frame.getHeight() - frame.getHeight() / 10);
-        panel.add(textArea);
+        addToPanel(textArea, false,
+        new int[]{10,frame.getHeight()/10,frame.getWidth(),frame.getHeight()-frame.getHeight()/10});
 
         applyBtn = new JButton("Apply");
-        applyBtn.setBounds(10,0,80,frame.getHeight()/10);
-        applyBtn.addActionListener(this);
-        panel.add(applyBtn);
+        addToPanel(applyBtn,true,
+        new int[]{10,0,80,frame.getHeight()/10});
+        last = applyBtn;
 
         resetBtn = new JButton("Reset");
-        resetBtn.setBounds(applyBtn.getX() + applyBtn.getWidth() + 10,0,80,frame.getHeight()/10);
-        resetBtn.addActionListener(this);
-        panel.add(resetBtn);
+        addToPanel(resetBtn, true, DEF_BOUND);
 
         openFBtn = new JButton("Open");
-        openFBtn.setBounds(resetBtn.getX() + resetBtn.getWidth() + 10,0,80,frame.getHeight()/10);
-        openFBtn.addActionListener(this);
-        panel.add(openFBtn);
+        addToPanel(openFBtn, true, DEF_BOUND);
 
         newFBtn = new JButton("New");
-        newFBtn.setBounds(openFBtn.getX() + openFBtn.getWidth() + 10,0,80,frame.getHeight()/10);
-        newFBtn.addActionListener(this);
-        panel.add(newFBtn);
+        addToPanel(newFBtn, true, DEF_BOUND);
 
-        textSizeBox = new JComboBox(TEXT_SIZE);
-        textSizeBox.setBounds(newFBtn.getX() + newFBtn.getWidth() + 10,0,20,frame.getHeight()/10);
+        textSizeBox = new JComboBox<String>(TEXT_SIZE);
+        addToPanel(textSizeBox, false,
+        new int[] {last.getX() + last.getWidth() + 10,0,20,frame.getHeight()/10});
         textSizeBox.addActionListener(this);
         panel.add(textSizeBox);
 
         fc = new JFileChooser();
 
         panel.updateUI();
+    }
+
+    private void addToPanel(Component obj, boolean isButton,int[] specBnd)
+    {
+        if (specBnd == DEF_BOUND)
+        obj.setBounds(last.getX()+
+        last.getWidth()+
+        10,0,80,frame.getHeight()/10);
+
+        else 
+            obj.setBounds(specBnd[0],specBnd[1],specBnd[2],specBnd[3]);
+
+        if(isButton)
+        ((AbstractButton) obj).addActionListener(this);
+
+        panel.add(obj);
+
+        if(specBnd == DEF_BOUND)
+        last = obj;
     }
 
     private void writeToFile(String txt)
