@@ -1,8 +1,7 @@
 
 // create a file with browser 
 // cntrl s save wwith indicator
-// text font
-
+// optimaizze add to panel
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -27,21 +26,24 @@ public class  TextWriter implements ActionListener
     private JButton applyBtn,resetBtn,openFBtn,newFBtn;
     private JTextArea textArea;
     private JFileChooser fc;
-    private JComboBox<String> textSizeBox,textColorBox,textFontBox;
+    private JComboBox<String> 
+    textSizeBox,textColorBox,textFontBox,textStyleBox;
     private Component last;
 
     private File f;
     private FileWriter fw;
 
-    private final String[] TEXT_SIZE = {"12","14","16","18","20","50"},
+    private final String[] 
+    TEXT_SIZE = {"12","14","16","18","20","50"},
     TEXT_COLOR = {"Black","White","Red","Green","Blue"},
-    TEXT_FONT = {"Serif", "SansSerif", "Monospaced"};
+    TEXT_FONT = {"Serif", "SansSerif", "Monospaced"},
+    TEXT_STYLE = {"plain","bold","italic","bold italic"};
     private final int[] DEF_BOUND = {-1,-1,-1,-1};
 
     public TextWriter()
     {
         frame = new JFrame("File Writer");
-        frame.setSize(600,900);
+        frame.setSize(900,900);
         frame.setDefaultCloseOperation(3);
         frame.setVisible(true);
 
@@ -68,7 +70,7 @@ public class  TextWriter implements ActionListener
 
         textSizeBox = new JComboBox<String>(TEXT_SIZE);
         addToPanel(textSizeBox, false,
-        new int[] {last.getX() + last.getWidth() + 10,0,20,frame.getHeight()/10});
+        new int[] {last.getX() + last.getWidth() + 10,0,40,frame.getHeight()/10});
         textSizeBox.addActionListener(this);
         last = textSizeBox;
 
@@ -84,7 +86,12 @@ public class  TextWriter implements ActionListener
         textFontBox.addActionListener(this);
         last = textFontBox;
 
-        
+        textStyleBox = new JComboBox<String>(TEXT_STYLE);
+        addToPanel(textStyleBox, false,
+        new int[] {last.getX() + last.getWidth() + 10,0,80,frame.getHeight()/10});
+        textStyleBox.addActionListener(this);
+        last = textStyleBox;
+
         fc = new JFileChooser();
 
         panel.updateUI();
@@ -186,6 +193,22 @@ public class  TextWriter implements ActionListener
         {
             textArea.setFont(new Font(textFontBox.getSelectedItem().toString(),
             textArea.getFont().getStyle(),textArea.getFont().getSize())); 
+        }
+
+        if (e.getSource() == textStyleBox)
+        {
+            if (textStyleBox.getSelectedItem().toString().equals(TEXT_STYLE[3]))
+            textArea.setFont(new Font(textArea.getFont().getName(),
+            1|2,textArea.getFont().getSize())); 
+
+            for (int i = 0; i < TEXT_STYLE.length -1; i++)
+            {
+                if(textStyleBox.getSelectedItem().toString().equals(TEXT_STYLE[i]))
+                textArea.setFont(new Font(textArea.getFont().getName(),
+            i,textArea.getFont().getSize())); 
+
+            }
+
         }
 
         if (e.getSource() == textColorBox)
