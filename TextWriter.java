@@ -19,7 +19,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-
 public class  TextWriter implements ActionListener
 {
     
@@ -28,14 +27,15 @@ public class  TextWriter implements ActionListener
     private JButton applyBtn,resetBtn,openFBtn,newFBtn;
     private JTextArea textArea;
     private JFileChooser fc;
-    private JComboBox<String> textSizeBox,textColorBox;
+    private JComboBox<String> textSizeBox,textColorBox,textFontBox;
     private Component last;
 
     private File f;
     private FileWriter fw;
 
     private final String[] TEXT_SIZE = {"12","14","16","18","20","50"},
-    TEXT_COLOR = {"Black","White","Red","Green","Blue"};
+    TEXT_COLOR = {"Black","White","Red","Green","Blue"},
+    TEXT_FONT = {"Serif", "SansSerif", "Monospaced"};
     private final int[] DEF_BOUND = {-1,-1,-1,-1};
 
     public TextWriter()
@@ -76,8 +76,15 @@ public class  TextWriter implements ActionListener
         addToPanel(textColorBox, false,
         new int[] {last.getX() + last.getWidth() + 10,0,60,frame.getHeight()/10});
         textColorBox.addActionListener(this);
-        last = textSizeBox;
+        last = textColorBox;
 
+        textFontBox = new JComboBox<String>(TEXT_FONT);
+        addToPanel(textFontBox, false,
+        new int[] {last.getX() + last.getWidth() + 10,0,100,frame.getHeight()/10});
+        textFontBox.addActionListener(this);
+        last = textFontBox;
+
+        
         fc = new JFileChooser();
 
         panel.updateUI();
@@ -165,7 +172,7 @@ public class  TextWriter implements ActionListener
 
         if (e.getSource() == newFBtn)
         {
-           // make 
+           textArea.setText("New File Does Not Work");
         }   
 
         if(e.getSource() == textSizeBox)
@@ -173,6 +180,12 @@ public class  TextWriter implements ActionListener
             textArea.setFont(new Font(textArea.getFont().getName(),
             textArea.getFont().getStyle(),
             Integer.parseInt(textSizeBox.getSelectedItem().toString()))); 
+        }
+
+        if (e.getSource() == textFontBox)
+        {
+            textArea.setFont(new Font(textFontBox.getSelectedItem().toString(),
+            textArea.getFont().getStyle(),textArea.getFont().getSize())); 
         }
 
         if (e.getSource() == textColorBox)
