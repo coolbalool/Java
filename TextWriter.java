@@ -1,15 +1,15 @@
 
 // create a file with browser 
 // cntrl s save wwith indicator
+// chenge text size
+// text color 
+// text font
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -28,9 +28,6 @@ public class  TextWriter implements ActionListener
     private File f;
     private FileWriter fw;
 
-    /**
-     * 
-     */
     public TextWriter()
     {
     
@@ -118,8 +115,8 @@ public class  TextWriter implements ActionListener
 
         if (e.getSource() == resetBtn)
         {
-            writeToFile(null);
-            textArea.setText(null);
+            writeToFile(new String());
+            textArea.setText(new String());
         }
 
         if (e.getSource() == openFBtn)
@@ -135,10 +132,7 @@ public class  TextWriter implements ActionListener
 
         if (e.getSource() == newFBtn)
         {
-        
-            if (fc.showOpenDialog(null) == 1)
-            System.out.println(fc.getSelectedFile().getAbsolutePath());
-
+           // make 
         }   
 
     }
