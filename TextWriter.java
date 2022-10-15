@@ -21,6 +21,11 @@ import javax.swing.JTextArea;
 public class  TextWriter implements ActionListener
 {
     
+    public static void main(String[] args)
+    {
+        TextWriter w = new TextWriter();
+    }
+
     private JFrame frame;
     private JPanel panel;
     private JButton applyBtn,resetBtn,openFBtn,newFBtn;

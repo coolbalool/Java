@@ -11,7 +11,7 @@ public class Main
     // Checkers c = new Checkers();
     //Gui gui = new Gui();
 
-    new TextWriter();
+   // new TextWriter();
        
 
     }
