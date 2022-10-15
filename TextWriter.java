@@ -1,20 +1,22 @@
 
 // create a file with browser 
 // cntrl s save wwith indicator
-// chenge text size
 // text color 
 // text font
 
+import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.Scanner;
+
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.awt.event.ActionListener;
-import java.util.Scanner;
 
 public class  TextWriter implements ActionListener
 {
@@ -24,22 +26,24 @@ public class  TextWriter implements ActionListener
     private JButton applyBtn,resetBtn,openFBtn,newFBtn;
     private JTextArea textArea;
     private JFileChooser fc;
+    private JComboBox textSizeBox;
 
     private File f;
     private FileWriter fw;
 
+    private final String[] TEXT_SIZE = {"12","14","16","18","20","50"};
+
     public TextWriter()
     {
-    
+
         frame = new JFrame("File Writer");
-        frame.setSize(600,600);
+        frame.setSize(600,900);
         frame.setDefaultCloseOperation(3);
         frame.setVisible(true);
 
         panel = new JPanel(null);
         frame.add(panel);
 
-        
         textArea = new JTextArea();
         textArea.setBounds(10,frame.getHeight() / 10,frame.getWidth(),frame.getHeight() - frame.getHeight() / 10);
         panel.add(textArea);
@@ -63,6 +67,11 @@ public class  TextWriter implements ActionListener
         newFBtn.setBounds(openFBtn.getX() + openFBtn.getWidth() + 10,0,80,frame.getHeight()/10);
         newFBtn.addActionListener(this);
         panel.add(newFBtn);
+
+        textSizeBox = new JComboBox(TEXT_SIZE);
+        textSizeBox.setBounds(newFBtn.getX() + newFBtn.getWidth() + 10,0,20,frame.getHeight()/10);
+        textSizeBox.addActionListener(this);
+        panel.add(textSizeBox);
 
         fc = new JFileChooser();
 
@@ -134,6 +143,14 @@ public class  TextWriter implements ActionListener
         {
            // make 
         }   
+
+        if(e.getSource() == textSizeBox)
+        {
+            textArea.setFont(new Font(textArea.getFont().getName(),
+            textArea.getFont().getStyle(),
+            Integer.parseInt(textSizeBox.getSelectedItem().toString())));
+        
+        }
 
     }
 
