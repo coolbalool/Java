@@ -1,9 +1,9 @@
 
 // create a file with browser 
 // cntrl s save wwith indicator
-// text color 
 // text font
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionListener;
@@ -28,13 +28,14 @@ public class  TextWriter implements ActionListener
     private JButton applyBtn,resetBtn,openFBtn,newFBtn;
     private JTextArea textArea;
     private JFileChooser fc;
-    private JComboBox<String> textSizeBox;
+    private JComboBox<String> textSizeBox,textColorBox;
     private Component last;
 
     private File f;
     private FileWriter fw;
 
-    private final String[] TEXT_SIZE = {"12","14","16","18","20","50"};
+    private final String[] TEXT_SIZE = {"12","14","16","18","20","50"},
+    TEXT_COLOR = {"Black","White","Red","Green","Blue"};
     private final int[] DEF_BOUND = {-1,-1,-1,-1};
 
     public TextWriter()
@@ -69,7 +70,13 @@ public class  TextWriter implements ActionListener
         addToPanel(textSizeBox, false,
         new int[] {last.getX() + last.getWidth() + 10,0,20,frame.getHeight()/10});
         textSizeBox.addActionListener(this);
-        panel.add(textSizeBox);
+        last = textSizeBox;
+
+        textColorBox = new JComboBox<String>(TEXT_COLOR);
+        addToPanel(textColorBox, false,
+        new int[] {last.getX() + last.getWidth() + 10,0,60,frame.getHeight()/10});
+        textColorBox.addActionListener(this);
+        last = textSizeBox;
 
         fc = new JFileChooser();
 
@@ -165,8 +172,26 @@ public class  TextWriter implements ActionListener
         {
             textArea.setFont(new Font(textArea.getFont().getName(),
             textArea.getFont().getStyle(),
-            Integer.parseInt(textSizeBox.getSelectedItem().toString())));
-        
+            Integer.parseInt(textSizeBox.getSelectedItem().toString()))); 
+        }
+
+        if (e.getSource() == textColorBox)
+        {
+            if (textColorBox.getSelectedItem().toString().equals(TEXT_COLOR[0]))
+            textArea.setForeground(Color.BLACK);
+
+            if (textColorBox.getSelectedItem().toString().equals(TEXT_COLOR[1]))
+            textArea.setForeground(Color.WHITE);
+
+            if (textColorBox.getSelectedItem().toString().equals(TEXT_COLOR[2]))
+            textArea.setForeground(Color.RED);
+
+            if (textColorBox.getSelectedItem().toString().equals(TEXT_COLOR[3]))
+            textArea.setForeground(Color.GREEN);
+
+            if (textColorBox.getSelectedItem().toString().equals(TEXT_COLOR[4]))
+            textArea.setForeground(Color.BLUE);
+            
         }
 
     }
