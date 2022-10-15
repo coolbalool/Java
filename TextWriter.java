@@ -1,7 +1,7 @@
 
 // create a file with browser 
 // cntrl s save wwith indicator
-// optimaizze add to panel
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -38,7 +38,7 @@ public class  TextWriter implements ActionListener
     TEXT_COLOR = {"Black","White","Red","Green","Blue"},
     TEXT_FONT = {"Serif", "SansSerif", "Monospaced"},
     TEXT_STYLE = {"plain","bold","italic","bold italic"};
-    private final int[] DEF_BOUND = {-1,-1,-1,-1};
+    private final int DEF_WIDTH = -1;
 
     public TextWriter()
     {
@@ -51,68 +51,59 @@ public class  TextWriter implements ActionListener
         frame.add(panel);
 
         textArea = new JTextArea();
-        addToPanel(textArea, false,
-        new int[]{10,frame.getHeight()/10,frame.getWidth(),frame.getHeight()-frame.getHeight()/10});
+        textArea.setBounds(10,frame.getHeight()/10,
+        frame.getWidth(),frame.getHeight()-frame.getHeight()/10);
+        panel.add(textArea);
 
         applyBtn = new JButton("Apply");
-        addToPanel(applyBtn,true,
-        new int[]{10,0,80,frame.getHeight()/10});
-        last = applyBtn;
+        addToTop(applyBtn,true,DEF_WIDTH);
 
         resetBtn = new JButton("Reset");
-        addToPanel(resetBtn, true, DEF_BOUND);
+        addToTop(resetBtn, true, DEF_WIDTH);
 
         openFBtn = new JButton("Open");
-        addToPanel(openFBtn, true, DEF_BOUND);
+        addToTop(openFBtn, true, DEF_WIDTH);
 
         newFBtn = new JButton("New");
-        addToPanel(newFBtn, true, DEF_BOUND);
+        addToTop(newFBtn, true, DEF_WIDTH);
 
         textSizeBox = new JComboBox<String>(TEXT_SIZE);
-        addToPanel(textSizeBox, false,
-        new int[] {last.getX() + last.getWidth() + 10,0,40,frame.getHeight()/10});
+        addToTop(textSizeBox, false,40);
         textSizeBox.addActionListener(this);
-        last = textSizeBox;
 
         textColorBox = new JComboBox<String>(TEXT_COLOR);
-        addToPanel(textColorBox, false,
-        new int[] {last.getX() + last.getWidth() + 10,0,60,frame.getHeight()/10});
+        addToTop(textColorBox, false,60);
         textColorBox.addActionListener(this);
-        last = textColorBox;
 
         textFontBox = new JComboBox<String>(TEXT_FONT);
-        addToPanel(textFontBox, false,
-        new int[] {last.getX() + last.getWidth() + 10,0,100,frame.getHeight()/10});
+        addToTop(textFontBox, false,100);
         textFontBox.addActionListener(this);
-        last = textFontBox;
 
         textStyleBox = new JComboBox<String>(TEXT_STYLE);
-        addToPanel(textStyleBox, false,
-        new int[] {last.getX() + last.getWidth() + 10,0,80,frame.getHeight()/10});
+        addToTop(textStyleBox, false,DEF_WIDTH);
         textStyleBox.addActionListener(this);
-        last = textStyleBox;
 
         fc = new JFileChooser();
 
         panel.updateUI();
     }
 
-    private void addToPanel(Component obj, boolean isButton,int[] specBnd)
+    private void addToTop(Component obj, boolean isButton,int width)
     {
-        if (specBnd == DEF_BOUND)
+        int w = width;
+        if (width == DEF_WIDTH) w = 80;
+        if (last != null)
+        {
         obj.setBounds(last.getX()+
         last.getWidth()+
-        10,0,80,frame.getHeight()/10);
-
-        else 
-            obj.setBounds(specBnd[0],specBnd[1],specBnd[2],specBnd[3]);
+        10,0,w,frame.getHeight()/10);
+        }
+        else obj.setBounds(10,0,w,frame.getHeight()/10);
 
         if(isButton)
         ((AbstractButton) obj).addActionListener(this);
 
         panel.add(obj);
-
-        if(specBnd == DEF_BOUND)
         last = obj;
     }
 
