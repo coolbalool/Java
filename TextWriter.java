@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Scanner;
 
@@ -152,24 +151,26 @@ public class TextWriter implements ActionListener {
 
     @Override
     public void actionPerformed(java.awt.event.ActionEvent e) {
-
+        // save
         if (e.getSource() == fileItem[0]) {
             try {
+                if (f == null)
+                f = new File("NewFile.txt");
                 fw = new FileWriter(f);
                 fw.write(textArea.getText());
                 fw.close();
             } catch (Exception s) {
-                System.err.println(e.toString());
+                System.err.println(s.toString());
             }
             return;
         }
-
+        // load
         if (e.getSource() == fileItem[1]) {
-
             if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 try {
                     String text = new String();
                     f = new File(fc.getSelectedFile().getAbsolutePath());
+                    System.out.println(f.getName());
                     in = new Scanner(f);
                     while (in.hasNextLine())
                         text += in.nextLine() + "\n";
@@ -181,21 +182,25 @@ public class TextWriter implements ActionListener {
             }
             return;
         }
-
-        if (e.getSource() == fileItem[2]) {
-
-            // in = new Scanner(f);
-            // writeToFile(new String());
-            // textArea.setText(new String());
-
+        // reset
+        if (e.getSource() == fileItem[2]){
+            try{
+             fw = new FileWriter(f);
+             fw.write(new String());
+             textArea.setText(new String());
+            fw.close();}
+            catch (Exception e2) {e2.printStackTrace();}
             return;
         }
-
+        //  new 
         if (e.getSource() == fileItem[3]) {
-            textArea.setText("New File Does Not Work");
+        
+            if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
+                f = new File(fc.getSelectedFile().getAbsolutePath() + "");
+            }
             return;
         }
-
+        // size
         for (int i = 0; i < styleSizeItem.length; i++) {
             if (e.getSource() == styleSizeItem[i]) {
                 textArea.setFont(new Font(textArea.getFont().getName(),
@@ -204,7 +209,7 @@ public class TextWriter implements ActionListener {
                 return;
             }
         }
-
+        //color
         for (int i = 0; i < styleColorItem.length; i++) {
             if (e.getSource() == styleColorItem[i]) {
 
@@ -217,7 +222,7 @@ public class TextWriter implements ActionListener {
                 return;
             }
         }
-
+        //font
         for (int i = 0; i < styleFontItem.length; i++) {
             if (e.getSource() == styleFontItem[i]) {
                 textArea.setFont(new Font(styleFontItem[i].getText(),
@@ -225,7 +230,7 @@ public class TextWriter implements ActionListener {
                 return;
             }
         }
-
+        //style
         for (int i = 0; i < styleStyleItem.length; i++) {
             if (e.getSource() == styleStyleItem[i]) {
                 if (styleStyleItem[i].getText().equals(TEXT_STYLE[TEXT_STYLE.length - 1]))
@@ -240,7 +245,7 @@ public class TextWriter implements ActionListener {
                 return;
             }
         }
-
+        //theme
         for (int i = 0; i < settingsThemeItem.length; i++) {
             if (e.getSource() == settingsThemeItem[i]) {
                 if (settingsThemeItem[i].getText().equals(SETTINGS_THEME[0])) {
@@ -260,7 +265,7 @@ public class TextWriter implements ActionListener {
                 }
             }
         }
-
+        // settings button
         for (int i = 0; i < settingsItem.length; i++) {
             if (e.getSource() == settingsItem[i]) {
 
