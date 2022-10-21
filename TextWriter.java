@@ -1,14 +1,15 @@
 
 /* 
- create a file with browser 
- cntrl s save wwith indicator
-    add settings inside theme 
-    add close buttob up
-    add dynamic scaling
+    TODO LIST:
+    cntrl s save wwith indicator
+    all color and theme selector
+    file loaded indicator
 */
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -22,6 +23,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.JSpinner;
 
 public class TextWriter implements ActionListener {
 
@@ -33,6 +37,7 @@ public class TextWriter implements ActionListener {
     private JPanel panel;
     private JTextArea textArea;
     private JFileChooser fc;
+    private JSpinner sizeSpinner;
 
     private Scanner in;
     private File f;
@@ -42,11 +47,11 @@ public class TextWriter implements ActionListener {
     private JMenu fileMenu, styleMenu, settingsMenu,
             styleSubMenu[], settingsSubMenu[];
     private JMenuItem fileItem[],
-            styleSizeItem[], styleColorItem[],
+            styleColorItem[],
             styleFontItem[], styleStyleItem[],
             settingsThemeItem[], settingsItem[];
 
-    private final String[] TEXT_SIZE = { "12", "14", "16", "18", "20", "50" },
+    private final String[]
             TEXT_COLOR = { "Black", "White", "Red", "Green", "Blue" },
             TEXT_FONT = { "Serif", "SansSerif", "Monospaced" },
             TEXT_STYLE = { "plain", "bold", "italic", "bold italic" },
@@ -57,6 +62,20 @@ public class TextWriter implements ActionListener {
         frame.setSize(900, 900);
         frame.setDefaultCloseOperation(3);
         frame.setVisible(true);
+
+        frame.addComponentListener(new ComponentListener()
+        {
+            @Override
+            public void componentResized(ComponentEvent e) 
+            {
+                // calls to the things that need to be dynamic scaled
+                textArea.setBounds(0, 0,frame.getWidth(), frame.getHeight());
+
+            }
+            @Override public void componentHidden(ComponentEvent e) {}
+            @Override public void componentMoved(ComponentEvent e) {}
+            @Override public void componentShown(ComponentEvent e) {}
+        });
 
         panel = new JPanel(null);
         frame.add(panel);
@@ -78,34 +97,36 @@ public class TextWriter implements ActionListener {
         }
 
         styleSubMenu = new JMenu[] {
-                new JMenu("Text Size"),
                 new JMenu("Text Color"),
                 new JMenu("Text Font"),
                 new JMenu("Text Style") };
-
-        styleSizeItem = new JMenuItem[TEXT_SIZE.length];
         styleColorItem = new JMenuItem[TEXT_COLOR.length];
         styleFontItem = new JMenuItem[TEXT_FONT.length];
         styleStyleItem = new JMenuItem[TEXT_STYLE.length];
 
-        for (int i = 0; i < TEXT_SIZE.length; i++) {
-            styleSizeItem[i] = new JMenuItem(TEXT_SIZE[i]);
-            styleSubMenu[0].add(styleSizeItem[i]);
-            styleSizeItem[i].addActionListener(this);
-        }
+        sizeSpinner = new JSpinner();
+        sizeSpinner.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                textArea.setFont(new Font(textArea.getFont().getName(),
+                textArea.getFont().getStyle(),
+                Integer.parseInt(sizeSpinner.getValue().toString())));}
+            });
+        styleMenu.add(sizeSpinner);
+
         for (int i = 0; i < TEXT_COLOR.length; i++) {
             styleColorItem[i] = new JMenuItem(TEXT_COLOR[i]);
-            styleSubMenu[1].add(styleColorItem[i]);
+            styleSubMenu[0].add(styleColorItem[i]);
             styleColorItem[i].addActionListener(this);
         }
         for (int i = 0; i < TEXT_FONT.length; i++) {
             styleFontItem[i] = new JMenuItem(TEXT_FONT[i]);
-            styleSubMenu[2].add(styleFontItem[i]);
+            styleSubMenu[1].add(styleFontItem[i]);
             styleFontItem[i].addActionListener(this);
         }
         for (int i = 0; i < TEXT_STYLE.length; i++) {
             styleStyleItem[i] = new JMenuItem(TEXT_STYLE[i]);
-            styleSubMenu[3].add(styleStyleItem[i]);
+            styleSubMenu[2].add(styleStyleItem[i]);
             styleStyleItem[i].addActionListener(this);
         }
 
@@ -140,8 +161,7 @@ public class TextWriter implements ActionListener {
         frame.setJMenuBar(menuBar);
 
         textArea = new JTextArea();
-        textArea.setBounds(0, 0,
-                frame.getWidth(), frame.getHeight());
+        textArea.setBounds(0, 0,frame.getWidth(), frame.getHeight());
         panel.add(textArea);
 
         fc = new JFileChooser();
@@ -199,15 +219,6 @@ public class TextWriter implements ActionListener {
                 f = new File(fc.getSelectedFile().getAbsolutePath() + "");
             }
             return;
-        }
-        // size
-        for (int i = 0; i < styleSizeItem.length; i++) {
-            if (e.getSource() == styleSizeItem[i]) {
-                textArea.setFont(new Font(textArea.getFont().getName(),
-                        textArea.getFont().getStyle(),
-                        Integer.parseInt(styleSizeItem[i].getText())));
-                return;
-            }
         }
         //color
         for (int i = 0; i < styleColorItem.length; i++) {
