@@ -23,6 +23,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.JSpinner;
@@ -38,18 +39,20 @@ public class TextWriter implements ActionListener {
     private JTextArea textArea;
     private JFileChooser fc;
     private JSpinner sizeSpinner;
+    private JTextField currFile;
 
     private Scanner in;
     private File f;
     private FileWriter fw;
 
     private JMenuBar menuBar;
-    private JMenu fileMenu, styleMenu, settingsMenu,
+    private JMenu 
+            fileMenu, styleMenu, settingsMenu,
             styleSubMenu[], settingsSubMenu[];
-    private JMenuItem fileItem[],
-            styleColorItem[],
-            styleFontItem[], styleStyleItem[],
-            settingsThemeItem[], settingsItem[];
+    private JMenuItem 
+            fileItem[],settingsItem[],
+            styleColorItem[],styleFontItem[], styleStyleItem[],
+            settingsThemeItem[];
 
     private final String[]
             TEXT_COLOR = { "Black", "White", "Red", "Green", "Blue" },
@@ -163,6 +166,7 @@ public class TextWriter implements ActionListener {
         textArea = new JTextArea();
         textArea.setBounds(0, 0,frame.getWidth(), frame.getHeight());
         panel.add(textArea);
+        
 
         fc = new JFileChooser();
 
