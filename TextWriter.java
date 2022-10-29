@@ -1,7 +1,7 @@
 
 /* 
     TODO LIST:
-    all color and font selector
+    font selector
 */
 import java.awt.Color;
 import java.awt.Font;
@@ -12,11 +12,11 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.lang.reflect.Field;
 import java.util.Scanner;
 import java.util.Stack;
 import java.awt.event.KeyListener;
 
+import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -41,6 +41,7 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
     private JSpinner sizeSpinner;
     private JTextField currFileText;
     private JScrollPane textScrollPane;
+    private JColorChooser colorChooser;
 
     private Scanner in;
     private File f;
@@ -52,11 +53,10 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
     private JMenu fileMenu, styleMenu, settingsMenu,
             styleSubMenu[], settingsSubMenu[];
     private JMenuItem fileItem[], settingsItem[],
-            styleColorItem[], styleFontItem[], styleStyleItem[],
-            settingsThemeItem[];
+            styleFontItem[], styleStyleItem[],
+            settingsThemeItem[], styleColorButton;
 
-    private final String[] TEXT_COLOR = { "Black", "White", "Red", "Green", "Blue" },
-            TEXT_FONT = { "Serif", "SansSerif", "Monospaced" },
+    private final String[] TEXT_FONT = { "Serif", "SansSerif", "Monospaced" },
             TEXT_STYLE = { "plain", "bold", "italic", "bold italic" },
             SETTINGS_THEME = { "Dark", "Light" };
 
@@ -84,14 +84,13 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
         }
 
         styleSubMenu = new JMenu[] {
-                new JMenu("Text Color"),
                 new JMenu("Text Font"),
                 new JMenu("Text Style") };
-        styleColorItem = new JMenuItem[TEXT_COLOR.length];
         styleFontItem = new JMenuItem[TEXT_FONT.length];
         styleStyleItem = new JMenuItem[TEXT_STYLE.length];
 
         sizeSpinner = new JSpinner();
+        sizeSpinner.setValue(25);
         sizeSpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -101,20 +100,17 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
             }
         });
         styleMenu.add(sizeSpinner);
-
-        for (int i = 0; i < TEXT_COLOR.length; i++) {
-            styleColorItem[i] = new JMenuItem(TEXT_COLOR[i]);
-            styleSubMenu[0].add(styleColorItem[i]);
-            styleColorItem[i].addActionListener(this);
-        }
+        styleColorButton = new JMenuItem("Color");
+        styleColorButton.addActionListener(this);
+        styleMenu.add(styleColorButton);
         for (int i = 0; i < TEXT_FONT.length; i++) {
             styleFontItem[i] = new JMenuItem(TEXT_FONT[i]);
-            styleSubMenu[1].add(styleFontItem[i]);
+            styleSubMenu[0].add(styleFontItem[i]);
             styleFontItem[i].addActionListener(this);
         }
         for (int i = 0; i < TEXT_STYLE.length; i++) {
             styleStyleItem[i] = new JMenuItem(TEXT_STYLE[i]);
-            styleSubMenu[2].add(styleStyleItem[i]);
+            styleSubMenu[1].add(styleStyleItem[i]);
             styleStyleItem[i].addActionListener(this);
         }
 
@@ -161,6 +157,7 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
         textArea.addKeyListener(this);
 
         fc = new JFileChooser();
+        colorChooser = new JColorChooser();
         undoStack = new Stack<String>();
 
         this.addComponentListener(new ComponentListener() {
@@ -258,17 +255,9 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
             return;
         }
         // color
-        for (int i = 0; i < styleColorItem.length; i++) {
-            if (e.getSource() == styleColorItem[i]) {
-
-                try {
-                    Field field = Class.forName("java.awt.Color").getField(styleColorItem[i].getText().toLowerCase());
-                    textArea.setForeground((Color) field.get(null));
-                } catch (Exception d) {
-                    System.err.println("Unknown Color !!");
-                }
-                return;
-            }
+        if (e.getSource() == styleColorButton) {
+            textArea.setForeground(JColorChooser.showDialog(
+                    colorChooser, "Choose Text Color", textArea.getForeground()));
         }
         // font
         for (int i = 0; i < styleFontItem.length; i++) {
