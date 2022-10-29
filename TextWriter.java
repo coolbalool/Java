@@ -1,7 +1,7 @@
 
 /* 
     TODO LIST:
-    font selector
+    scroll pane to font 
 */
 import java.awt.Color;
 import java.awt.Font;
@@ -15,8 +15,10 @@ import java.io.FileWriter;
 import java.util.Scanner;
 import java.util.Stack;
 import java.awt.event.KeyListener;
+import java.awt.GraphicsEnvironment;
 
 import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -42,6 +44,7 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
     private JTextField currFileText;
     private JScrollPane textScrollPane;
     private JColorChooser colorChooser;
+    private JComboBox<String> fontComboBox;
 
     private Scanner in;
     private File f;
@@ -50,14 +53,11 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
     private Stack<String> undoStack;
 
     private JMenuBar menuBar;
-    private JMenu fileMenu, styleMenu, settingsMenu,
-            styleSubMenu[], settingsSubMenu[];
+    private JMenu fileMenu, styleMenu, settingsMenu,settingsSubMenu[],styleStyleMenu;
     private JMenuItem fileItem[], settingsItem[],
-            styleFontItem[], styleStyleItem[],
-            settingsThemeItem[], styleColorButton;
+     styleStyleItem[],settingsThemeItem[], styleColorButton;
 
-    private final String[] TEXT_FONT = { "Serif", "SansSerif", "Monospaced" },
-            TEXT_STYLE = { "plain", "bold", "italic", "bold italic" },
+    private final String[] TEXT_STYLE = { "plain", "bold", "italic", "bold italic" },
             SETTINGS_THEME = { "Dark", "Light" };
 
     public TextWriter() {
@@ -82,13 +82,7 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
             fileMenu.add(fileItem[i]);
             fileItem[i].addActionListener(this);
         }
-
-        styleSubMenu = new JMenu[] {
-                new JMenu("Text Font"),
-                new JMenu("Text Style") };
-        styleFontItem = new JMenuItem[TEXT_FONT.length];
-        styleStyleItem = new JMenuItem[TEXT_STYLE.length];
-
+     
         sizeSpinner = new JSpinner();
         sizeSpinner.setValue(25);
         sizeSpinner.addChangeListener(new ChangeListener() {
@@ -100,22 +94,24 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
             }
         });
         styleMenu.add(sizeSpinner);
-        styleColorButton = new JMenuItem("Color");
+        styleColorButton = new JMenuItem("Text Color");
         styleColorButton.addActionListener(this);
         styleMenu.add(styleColorButton);
-        for (int i = 0; i < TEXT_FONT.length; i++) {
-            styleFontItem[i] = new JMenuItem(TEXT_FONT[i]);
-            styleSubMenu[0].add(styleFontItem[i]);
-            styleFontItem[i].addActionListener(this);
-        }
+
+        fontComboBox = new JComboBox<String>(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
+        fontComboBox.addActionListener(this);
+        styleMenu.add(fontComboBox);
+
+        styleStyleMenu = new JMenu("Text Style");
+        styleStyleItem = new JMenuItem[TEXT_STYLE.length];
+        styleMenu.add(styleStyleMenu);
         for (int i = 0; i < TEXT_STYLE.length; i++) {
             styleStyleItem[i] = new JMenuItem(TEXT_STYLE[i]);
-            styleSubMenu[1].add(styleStyleItem[i]);
+            styleStyleMenu.add(styleStyleItem[i]);
             styleStyleItem[i].addActionListener(this);
         }
 
-        for (int i = 0; i < styleSubMenu.length; i++)
-            styleMenu.add(styleSubMenu[i]);
+        styleMenu.add(styleStyleMenu);
 
         settingsSubMenu = new JMenu[] {
                 new JMenu("Theme"), };
@@ -260,13 +256,11 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
                     colorChooser, "Choose Text Color", textArea.getForeground()));
         }
         // font
-        for (int i = 0; i < styleFontItem.length; i++) {
-            if (e.getSource() == styleFontItem[i]) {
-                textArea.setFont(new Font(styleFontItem[i].getText(),
-                        textArea.getFont().getStyle(), textArea.getFont().getSize()));
+        if(e.getSource() == fontComboBox){
+                textArea.setFont(new Font((String)fontComboBox.getSelectedItem(),textArea.getFont().getStyle(), textArea.getFont().getSize()));
                 return;
-            }
         }
+        
         // style
         for (int i = 0; i < styleStyleItem.length; i++) {
             if (e.getSource() == styleStyleItem[i]) {
