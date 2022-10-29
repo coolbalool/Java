@@ -153,8 +153,6 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
         this.setJMenuBar(menuBar);
 
         textArea = new JTextArea();
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
         textScrollPane = new JScrollPane(textArea);
         textScrollPane.setSize(getWidth(), getHeight());
         textScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
