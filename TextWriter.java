@@ -1,87 +1,71 @@
 
 /* 
     TODO LIST:
-    cntrl s save wwith indicator
-    all color and theme selector
-    file loaded indicator
+    all color and font selector
 */
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.lang.reflect.Field;
 import java.util.Scanner;
+import java.util.Stack;
+import java.awt.event.KeyListener;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.JSpinner;
 
-public class TextWriter implements ActionListener {
+public class TextWriter extends JFrame implements ActionListener, KeyListener {
 
     public static void main(String[] args) {
         new TextWriter();
     }
 
-    private JFrame frame;
-    private JPanel panel;
     private JTextArea textArea;
     private JFileChooser fc;
     private JSpinner sizeSpinner;
-    private JTextField currFile;
+    private JTextField currFileText;
+    private JScrollPane textScrollPane;
 
     private Scanner in;
     private File f;
     private FileWriter fw;
 
+    private Stack<String> undoStack;
+
     private JMenuBar menuBar;
-    private JMenu 
-            fileMenu, styleMenu, settingsMenu,
+    private JMenu fileMenu, styleMenu, settingsMenu,
             styleSubMenu[], settingsSubMenu[];
-    private JMenuItem 
-            fileItem[],settingsItem[],
-            styleColorItem[],styleFontItem[], styleStyleItem[],
+    private JMenuItem fileItem[], settingsItem[],
+            styleColorItem[], styleFontItem[], styleStyleItem[],
             settingsThemeItem[];
 
-    private final String[]
-            TEXT_COLOR = { "Black", "White", "Red", "Green", "Blue" },
+    private final String[] TEXT_COLOR = { "Black", "White", "Red", "Green", "Blue" },
             TEXT_FONT = { "Serif", "SansSerif", "Monospaced" },
             TEXT_STYLE = { "plain", "bold", "italic", "bold italic" },
             SETTINGS_THEME = { "Dark", "Light" };
 
     public TextWriter() {
-        frame = new JFrame("File Writer");
-        frame.setSize(900, 900);
-        frame.setDefaultCloseOperation(3);
-        frame.setVisible(true);
-
-        frame.addComponentListener(new ComponentListener()
-        {
-            @Override
-            public void componentResized(ComponentEvent e) 
-            {
-                // calls to the things that need to be dynamic scaled
-                textArea.setBounds(0, 0,frame.getWidth(), frame.getHeight());
-
-            }
-            @Override public void componentHidden(ComponentEvent e) {}
-            @Override public void componentMoved(ComponentEvent e) {}
-            @Override public void componentShown(ComponentEvent e) {}
-        });
-
-        panel = new JPanel(null);
-        frame.add(panel);
+        setTitle("Text Writer");
+        setDefaultCloseOperation(3);
+        setSize(500, 500);
+        setLocationRelativeTo(null);
+        setVisible(true);
 
         menuBar = new JMenuBar();
         fileMenu = new JMenu("File");
@@ -112,9 +96,10 @@ public class TextWriter implements ActionListener {
             @Override
             public void stateChanged(ChangeEvent e) {
                 textArea.setFont(new Font(textArea.getFont().getName(),
-                textArea.getFont().getStyle(),
-                Integer.parseInt(sizeSpinner.getValue().toString())));}
-            });
+                        textArea.getFont().getStyle(),
+                        Integer.parseInt(sizeSpinner.getValue().toString())));
+            }
+        });
         styleMenu.add(sizeSpinner);
 
         for (int i = 0; i < TEXT_COLOR.length; i++) {
@@ -158,34 +143,81 @@ public class TextWriter implements ActionListener {
             settingsItem[i].addActionListener(this);
         }
 
+        currFileText = new JTextField(getCurrFileText());
+        currFileText.setEditable(false);
+
         menuBar.add(fileMenu);
         menuBar.add(styleMenu);
         menuBar.add(settingsMenu);
-        frame.setJMenuBar(menuBar);
+        menuBar.add(currFileText);
+        this.setJMenuBar(menuBar);
 
         textArea = new JTextArea();
-        textArea.setBounds(0, 0,frame.getWidth(), frame.getHeight());
-        panel.add(textArea);
-        
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textScrollPane = new JScrollPane(textArea);
+        textScrollPane.setSize(getWidth(), getHeight());
+        textScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        textScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        add(textScrollPane);
+        textArea.addKeyListener(this);
 
         fc = new JFileChooser();
+        undoStack = new Stack<String>();
 
-        panel.updateUI();
+        this.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                // calls to the things that need to be dynamic scaled
+                textScrollPane.setSize(getWidth(), getHeight());
+
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+            }
+        });
+
+        addKeyListener(this);
+        this.pack();
+        setSize(500, 500);
+        setLocationRelativeTo(null);
+    }
+
+    public String getCurrFileText() {
+
+        if (f == null)
+            return "No Open File";
+        else
+            return "Current File:" + f.getName();
+    }
+
+    public void saveFile() {
+        try {
+            if (f == null)
+                f = new File("NewFile.txt");
+            fw = new FileWriter(f);
+            fw.write(textArea.getText());
+            fw.close();
+        } catch (Exception s) {
+            System.err.println(s.toString());
+        }
+        currFileText.setText(getCurrFileText());
     }
 
     @Override
     public void actionPerformed(java.awt.event.ActionEvent e) {
         // save
         if (e.getSource() == fileItem[0]) {
-            try {
-                if (f == null)
-                f = new File("NewFile.txt");
-                fw = new FileWriter(f);
-                fw.write(textArea.getText());
-                fw.close();
-            } catch (Exception s) {
-                System.err.println(s.toString());
-            }
+            saveFile();
             return;
         }
         // load
@@ -204,27 +236,30 @@ public class TextWriter implements ActionListener {
                     e1.printStackTrace();
                 }
             }
+            currFileText.setText(getCurrFileText());
             return;
         }
         // reset
-        if (e.getSource() == fileItem[2]){
-            try{
-             fw = new FileWriter(f);
-             fw.write(new String());
-             textArea.setText(new String());
-            fw.close();}
-            catch (Exception e2) {e2.printStackTrace();}
-            return;
-        }
-        //  new 
-        if (e.getSource() == fileItem[3]) {
-        
-            if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
-                f = new File(fc.getSelectedFile().getAbsolutePath() + "");
+        if (e.getSource() == fileItem[2]) {
+            try {
+                fw = new FileWriter(f);
+                fw.write(new String());
+                textArea.setText(new String());
+                fw.close();
+            } catch (Exception e2) {
+                e2.printStackTrace();
             }
             return;
         }
-        //color
+        // new
+        if (e.getSource() == fileItem[3]) {
+            if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                f = new File(fc.getSelectedFile().getAbsolutePath() + ".txt");
+                saveFile();
+            }
+            return;
+        }
+        // color
         for (int i = 0; i < styleColorItem.length; i++) {
             if (e.getSource() == styleColorItem[i]) {
 
@@ -237,7 +272,7 @@ public class TextWriter implements ActionListener {
                 return;
             }
         }
-        //font
+        // font
         for (int i = 0; i < styleFontItem.length; i++) {
             if (e.getSource() == styleFontItem[i]) {
                 textArea.setFont(new Font(styleFontItem[i].getText(),
@@ -245,7 +280,7 @@ public class TextWriter implements ActionListener {
                 return;
             }
         }
-        //style
+        // style
         for (int i = 0; i < styleStyleItem.length; i++) {
             if (e.getSource() == styleStyleItem[i]) {
                 if (styleStyleItem[i].getText().equals(TEXT_STYLE[TEXT_STYLE.length - 1]))
@@ -260,18 +295,18 @@ public class TextWriter implements ActionListener {
                 return;
             }
         }
-        //theme
+        // theme
         for (int i = 0; i < settingsThemeItem.length; i++) {
             if (e.getSource() == settingsThemeItem[i]) {
                 if (settingsThemeItem[i].getText().equals(SETTINGS_THEME[0])) {
-                    menuBar.setBackground(Color.DARK_GRAY);
-                    textArea.setBackground(Color.GRAY);
+                    menuBar.setBackground(Color.BLACK);
+                    textArea.setBackground(Color.DARK_GRAY);
                     fileMenu.setForeground(Color.WHITE);
                     styleMenu.setForeground(Color.WHITE);
                     settingsMenu.setForeground(Color.WHITE);
                     return;
                 } else if (settingsThemeItem[i].getText().equals(SETTINGS_THEME[1])) {
-                    menuBar.setBackground(Color.LIGHT_GRAY);
+                    menuBar.setBackground(new Color(238, 238, 238));
                     textArea.setBackground(Color.WHITE);
                     fileMenu.setForeground(Color.BLACK);
                     styleMenu.setForeground(Color.BLACK);
@@ -285,11 +320,34 @@ public class TextWriter implements ActionListener {
             if (e.getSource() == settingsItem[i]) {
 
                 if (settingsItem[i].getText().equals("Exit"))
-                    frame.dispose();
+                    this.dispose();
 
                 return;
             }
         }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+        if (e.isControlDown()) {
+            if (e.getKeyCode() == KeyEvent.VK_Z)
+                textArea.setText((String) undoStack.pop());
+            else if (e.getKeyCode() == KeyEvent.VK_S)
+                saveFile();
+            else if (e.getKeyCode() == KeyEvent.VK_W)
+                dispose();
+        } else
+            undoStack.push((String) textArea.getText());
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
     }
 
 }
