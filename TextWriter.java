@@ -1,7 +1,9 @@
 
 /* 
     TODO LIST:
-    scroll pane to font 
+    make multi files 
+    make code better 
+    
 */
 import java.awt.Color;
 import java.awt.Font;
@@ -17,6 +19,7 @@ import java.util.Stack;
 import java.awt.event.KeyListener;
 import java.awt.GraphicsEnvironment;
 
+import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -45,6 +48,7 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
     private JScrollPane textScrollPane;
     private JColorChooser colorChooser;
     private JComboBox<String> fontComboBox;
+    private JCheckBox styleItalicBox,styleBoldBox,themeBox;
 
     private Scanner in;
     private File f;
@@ -53,12 +57,8 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
     private Stack<String> undoStack;
 
     private JMenuBar menuBar;
-    private JMenu fileMenu, styleMenu, settingsMenu,settingsSubMenu[],styleStyleMenu;
-    private JMenuItem fileItem[], settingsItem[],
-     styleStyleItem[],settingsThemeItem[], styleColorButton;
-
-    private final String[] TEXT_STYLE = { "plain", "bold", "italic", "bold italic" },
-            SETTINGS_THEME = { "Dark", "Light" };
+    private JMenu fileMenu, styleMenu, settingsMenu;
+    private JMenuItem fileItem[], styleColorButton,exitButton;
 
     public TextWriter() {
         setTitle("Text Writer");
@@ -82,7 +82,7 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
             fileMenu.add(fileItem[i]);
             fileItem[i].addActionListener(this);
         }
-     
+     // font menu
         sizeSpinner = new JSpinner();
         sizeSpinner.setValue(25);
         sizeSpinner.addChangeListener(new ChangeListener() {
@@ -97,53 +97,33 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
         styleColorButton = new JMenuItem("Text Color");
         styleColorButton.addActionListener(this);
         styleMenu.add(styleColorButton);
-
-        fontComboBox = new JComboBox<String>(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
-        fontComboBox.addActionListener(this);
-        styleMenu.add(fontComboBox);
-
-        styleStyleMenu = new JMenu("Text Style");
-        styleStyleItem = new JMenuItem[TEXT_STYLE.length];
-        styleMenu.add(styleStyleMenu);
-        for (int i = 0; i < TEXT_STYLE.length; i++) {
-            styleStyleItem[i] = new JMenuItem(TEXT_STYLE[i]);
-            styleStyleMenu.add(styleStyleItem[i]);
-            styleStyleItem[i].addActionListener(this);
-        }
-
-        styleMenu.add(styleStyleMenu);
-
-        settingsSubMenu = new JMenu[] {
-                new JMenu("Theme"), };
-
-        settingsItem = new JMenuItem[] {
-                new JMenuItem("Exit") };
-
-        settingsThemeItem = new JMenuItem[SETTINGS_THEME.length];
-
-        for (int i = 0; i < SETTINGS_THEME.length; i++) {
-            settingsThemeItem[i] = new JMenuItem(SETTINGS_THEME[i]);
-            settingsSubMenu[0].add(settingsThemeItem[i]);
-            settingsThemeItem[i].addActionListener(this);
-        }
-
-        for (int i = 0; i < settingsSubMenu.length; i++)
-            settingsMenu.add(settingsSubMenu[i]);
-
-        for (int i = 0; i < settingsItem.length; i++) {
-            settingsMenu.add(settingsItem[i]);
-            settingsItem[i].addActionListener(this);
-        }
-
+            //styke box
+            styleItalicBox = new JCheckBox("Italic");
+            styleItalicBox.addActionListener(this);
+            styleMenu.add(styleItalicBox);
+            styleBoldBox = new JCheckBox("Bold");
+            styleBoldBox.addActionListener(this);
+            styleMenu.add(styleBoldBox);
+            // settings menu
+            themeBox = new JCheckBox("Dark Theme");
+            themeBox.addActionListener(this);
+            settingsMenu.add(themeBox); 
+            exitButton =  new JMenuItem("Exit");
+            exitButton.addActionListener(this);
+            settingsMenu.add(exitButton);
+        
         currFileText = new JTextField(getCurrFileText());
         currFileText.setEditable(false);
 
         menuBar.add(fileMenu);
         menuBar.add(styleMenu);
         menuBar.add(settingsMenu);
+        fontComboBox = new JComboBox<String>(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
+        fontComboBox.addActionListener(this);
+        menuBar.add(fontComboBox);
         menuBar.add(currFileText);
         this.setJMenuBar(menuBar);
-
+        // text area
         textArea = new JTextArea();
         textScrollPane = new JScrollPane(textArea);
         textScrollPane.setSize(getWidth(), getHeight());
@@ -161,7 +141,6 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
             public void componentResized(ComponentEvent e) {
                 // calls to the things that need to be dynamic scaled
                 textScrollPane.setSize(getWidth(), getHeight());
-
             }
 
             @Override
@@ -204,15 +183,23 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
         currFileText.setText(getCurrFileText());
     }
 
+    public void fontStyleManager()
+    {
+        if (styleBoldBox.isSelected() && styleItalicBox.isSelected())
+        textArea.setFont(new Font(textArea.getFont().getName(),Font.BOLD | Font.ITALIC,textArea.getFont().getSize()));
+        else if (styleBoldBox.isSelected())
+        textArea.setFont(new Font(textArea.getFont().getName(),Font.BOLD,textArea.getFont().getSize()));
+        else if (styleItalicBox.isSelected())
+        textArea.setFont(new Font(textArea.getFont().getName(),Font.ITALIC,textArea.getFont().getSize()));
+        else textArea.setFont(new Font(textArea.getFont().getName(),Font.PLAIN,textArea.getFont().getSize()));
+    }
+
     @Override
     public void actionPerformed(java.awt.event.ActionEvent e) {
         // save
-        if (e.getSource() == fileItem[0]) {
-            saveFile();
-            return;
-        }
+        if (e.getSource() == fileItem[0]) saveFile();
         // load
-        if (e.getSource() == fileItem[1]) {
+        else if (e.getSource() == fileItem[1]) {
             if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 try {
                     String text = new String();
@@ -228,10 +215,9 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
                 }
             }
             currFileText.setText(getCurrFileText());
-            return;
         }
         // reset
-        if (e.getSource() == fileItem[2]) {
+        else if (e.getSource() == fileItem[2]) {
             try {
                 fw = new FileWriter(f);
                 fw.write(new String());
@@ -239,73 +225,38 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
                 fw.close();
             } catch (Exception e2) {
                 e2.printStackTrace();
-            }
-            return;
-        }
+            }}
         // new
-        if (e.getSource() == fileItem[3]) {
+        else if (e.getSource() == fileItem[3]) {
             if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
                 f = new File(fc.getSelectedFile().getAbsolutePath() + ".txt");
                 saveFile();
-            }
-            return;
-        }
+            }}
         // color
-        if (e.getSource() == styleColorButton) {
-            textArea.setForeground(JColorChooser.showDialog(
-                    colorChooser, "Choose Text Color", textArea.getForeground()));
-        }
+        else if (e.getSource() == styleColorButton)
+        textArea.setForeground(JColorChooser.showDialog(colorChooser, "Choose Text Color", textArea.getForeground()));
         // font
-        if(e.getSource() == fontComboBox){
-                textArea.setFont(new Font((String)fontComboBox.getSelectedItem(),textArea.getFont().getStyle(), textArea.getFont().getSize()));
-                return;
-        }
-        
-        // style
-        for (int i = 0; i < styleStyleItem.length; i++) {
-            if (e.getSource() == styleStyleItem[i]) {
-                if (styleStyleItem[i].getText().equals(TEXT_STYLE[TEXT_STYLE.length - 1]))
-                    textArea.setFont(new Font(textArea.getFont().getName(),
-                            1 | 2, textArea.getFont().getSize()));
-
-                else if (styleStyleItem[i].getText().equals(TEXT_STYLE[i]))
-                    textArea.setFont(new Font(textArea.getFont().getName(),
-                            i, textArea.getFont().getSize()));
-                else
-                    System.err.println("Text Style Does Not Match The Constant Order");
-                return;
-            }
-        }
+        else if(e.getSource() == fontComboBox)
+        textArea.setFont(new Font((String)fontComboBox.getSelectedItem(),textArea.getFont().getStyle(), textArea.getFont().getSize()));
+        //style
+        else if (e.getSource() == styleBoldBox || e.getSource() == styleItalicBox) fontStyleManager();
         // theme
-        for (int i = 0; i < settingsThemeItem.length; i++) {
-            if (e.getSource() == settingsThemeItem[i]) {
-                if (settingsThemeItem[i].getText().equals(SETTINGS_THEME[0])) {
+        else if (e.getSource() == themeBox) {
+                if (themeBox.isSelected()) {
                     menuBar.setBackground(Color.BLACK);
                     textArea.setBackground(Color.DARK_GRAY);
                     fileMenu.setForeground(Color.WHITE);
                     styleMenu.setForeground(Color.WHITE);
                     settingsMenu.setForeground(Color.WHITE);
-                    return;
-                } else if (settingsThemeItem[i].getText().equals(SETTINGS_THEME[1])) {
+                } else{
                     menuBar.setBackground(new Color(238, 238, 238));
                     textArea.setBackground(Color.WHITE);
                     fileMenu.setForeground(Color.BLACK);
                     styleMenu.setForeground(Color.BLACK);
-                    settingsMenu.setForeground(Color.BLACK);
-                    return;
-                }
-            }
-        }
+                    settingsMenu.setForeground(Color.BLACK);}}
         // settings button
-        for (int i = 0; i < settingsItem.length; i++) {
-            if (e.getSource() == settingsItem[i]) {
-
-                if (settingsItem[i].getText().equals("Exit"))
-                    this.dispose();
-
-                return;
-            }
-        }
+       if(e.getSource() == exitButton) 
+        this.dispose();
     }
 
     @Override
@@ -319,10 +270,8 @@ public class TextWriter extends JFrame implements ActionListener, KeyListener {
         if (e.isControlDown()) {
             if (e.getKeyCode() == KeyEvent.VK_Z)
                 textArea.setText((String) undoStack.pop());
-            else if (e.getKeyCode() == KeyEvent.VK_S)
-                saveFile();
-            else if (e.getKeyCode() == KeyEvent.VK_W)
-                dispose();
+            else if (e.getKeyCode() == KeyEvent.VK_S) saveFile();
+            else if (e.getKeyCode() == KeyEvent.VK_W) dispose();
         } else
             undoStack.push((String) textArea.getText());
     }
