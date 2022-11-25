@@ -39,7 +39,7 @@ public class Gui implements ActionListener {
 
     frame.setSize(500, 300);
     frame.setVisible(true);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     frame.setVisible(true);
     frame.add(panel);
     panel.setLayout(cl);
@@ -92,7 +92,7 @@ public class Gui implements ActionListener {
         }
     }
 
-    if (operation == "check") {
+    if ("check".equals(operation)) {
       // tie checker
       if (tMoves >= 9) {
         tWinner = "tie";
@@ -107,7 +107,7 @@ public class Gui implements ActionListener {
       String temp = "";
       for (int i = 0; i < board.length; i++) {
         // row
-        if (board[i][0].getText() == "")
+        if ("".equals(board[i][0].getText()))
           continue;
         temp = board[i][0].getText();
         for (int j = 0; j < board.length; j++) {
@@ -123,7 +123,7 @@ public class Gui implements ActionListener {
 
       for (int i = 0; i < board.length; i++) {
         // col
-        if (board[0][i].getText() == "")
+        if ("".equals(board[0][i].getText()))
           continue;
         temp = board[0][i].getText();
         for (int j = 0; j < board.length; j++) {
@@ -138,7 +138,7 @@ public class Gui implements ActionListener {
       }
 
       // (0,0) mid
-      if (board[0][0].getText() == "")
+      if ("".equals(board[0][0].getText()))
         return;
       temp = board[0][0].getText();
       for (int i = 0; i < board.length; i++) {
@@ -152,7 +152,7 @@ public class Gui implements ActionListener {
       }
 
       // other mid
-      if (board[0][board.length - 1].getText() == "")
+      if ("".equals(board[0][board.length - 1].getText()))
         return;
       temp = board[0][board.length - 1].getText();
       for (int i = 0; i < board.length; i++) {
@@ -166,13 +166,13 @@ public class Gui implements ActionListener {
 
     }
 
-    if (operation == "go") {
-      if (tWinner == "tie") {
+    if ("go".equals(operation)) {
+      if ("tie".equals(tWinner)) {
         tWinnerText.setText("Game is a tie!");
         tPlayerTxt.setText("");
       }
 
-      else if (tWinner == "X" || tWinner == "O") {
+      else if ("X".equals(tWinner) || "O".equals(tWinner)) {
         tWinnerText.setText(tWinner + " is the winner!");
         tPlayerTxt.setText("");
       }
@@ -180,7 +180,7 @@ public class Gui implements ActionListener {
       ticTacToe("reset");
     }
 
-    if (operation == "reset")
+    if ("reset".equals(operation))
       tReset.setVisible(true);
 
   }
