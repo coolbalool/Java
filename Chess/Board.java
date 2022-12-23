@@ -1,7 +1,11 @@
 package Chess;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.io.File;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -35,7 +39,7 @@ public class Board
                     board[i][j].setForeground(Color.WHITE);
                 }
                 paintWhite = !paintWhite;
-                board[i][j].addActionListener(new ButtonListener());
+                board[i][j].addActionListener(new ButtonListener(board));
                 board[i][j].setVisible(true);
                 panel.add(board[i][j]);
             }
@@ -49,42 +53,48 @@ public class Board
         {
             for (int j = 0; j < board.length; j++)
             {
-                
+                String s = "Chess/Pieces/";
                 // Pawn
                 if (j == 1)
-                    board[i][j].setText("B-P");
+                    s += "B_P.png";
                 else if (j == board.length -2)
-                    board[i][j].setText("W-P");
+                    s += "W_P.png";
 
                 // Rook
                 else if (j == 0 &&(i == 0 || i == board[0].length-1))
-                    board[i][j].setText("B-R");
+                    s += "B_R.png";
                 else if (j == board.length-1 &&(i == 0 || i == board.length-1))
-                board[i][j].setText("W-R");
+                    s += "W_R.png";
 
                 // Knight
                 else if (j == 0 &&(i == 1 || i == board.length-2))
-                    board[i][j].setText("B-N");
+                    s += "B_N.png";
                 else if (j == board.length-1 &&(i == 1 || i == board.length-2))
-                    board[i][j].setText("W-N");
+                    s += "W_N.png";
 
                 // Bishop
                 else if (j == 0 &&(i == 2 || i == board.length-3))
-                    board[i][j].setText("B-B");
+                    s += "B_B.png";
                 else if (j == board.length-1 &&(i == 2 || i == board.length-3))
-                    board[i][j].setText("W-B");
+                    s += "W_B.png";
                 
                 // Queen
                 else if (j == 0 && i == 3)
-                    board[i][j].setText("B-Q");
+                    s += "B_Q.png";
                 else if (j == board.length-1 &&i == 3)
-                    board[i][j].setText("W-Q");
+                    s += "W_Q.png";
                 
                 // King
                 else if (j == 0 && i == 4)
-                    board[i][j].setText("B-K");
+                    s += "B_K.png";
                 else if (j == board.length-1 && i == 4)
-                    board[i][j].setText("W-K");
+                    s += "W_K.png";
+
+                if (s == "Chess/Pieces/") continue;
+
+                board[i][j].setIcon(new ImageIcon(
+                    new ImageIcon(s).getImage().getScaledInstance(
+                        board[i][j].getWidth()-20,board[i][j].getHeight()-20,Image.SCALE_DEFAULT)));
 
             }
         }
