@@ -2,9 +2,7 @@ package Chess;
 
 import java.awt.Color;
 import java.awt.Image;
-import java.io.File;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -13,7 +11,7 @@ public class Board
 {
 
     private JPanel panel;
-    public JButton[][] board;
+    private JButton[][] board;
 
     public Board(JPanel panel)
     {
@@ -30,7 +28,7 @@ public class Board
         {
             for (int j = 0; j < board[0].length; j++)
             {
-                board[i][j] = new JButton(i + " " + j);
+                board[i][j] = new JButton();
                 board[i][j].setBounds(100*(i), 70*(j), 100, 70);
                 if(allEven(i, j)) board[i][j].setBackground(new Color(255,255,255));
                 else 

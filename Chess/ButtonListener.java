@@ -24,11 +24,11 @@ public class ButtonListener implements ActionListener
             for (int j = 0; j < board.length; j++)
             {
                 if (e.getSource() == board[i][j]){
-                if (board[i][j].getText().charAt(1) != ' ')
-                {
+               // if (board[i][j].getText().charAt(1) != ' ')
+                //{
                     hasChose = true;
-                }
-                else hasChose = false;
+                //}
+                //else hasChose = false;
                 System.out.println(hasChose);
             }
 
