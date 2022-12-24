@@ -92,7 +92,7 @@ public class Board
 
                 board[i][j].setIcon(new ImageIcon(
                     new ImageIcon(s).getImage().getScaledInstance(
-                        board[i][j].getWidth()-20,board[i][j].getHeight()-20,Image.SCALE_DEFAULT)));
+                        board[i][j].getWidth(),board[i][j].getHeight(),Image.SCALE_DEFAULT)));
 
             }
         }

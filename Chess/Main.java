@@ -1,6 +1,5 @@
 package Chess;
 
-import javax.imageio.plugins.jpeg.JPEGHuffmanTable;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -12,7 +11,6 @@ public class Main extends JFrame
     public static void main(String[] args) 
     {
          new Main();
-
     }
 
     public Main()
