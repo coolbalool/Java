@@ -6,7 +6,8 @@ import javax.swing.JPanel;
 public class Main extends JFrame
 {
 
-    JPanel panel = new JPanel(null);
+    private JPanel panel;
+    private Piece[][] board;
 
     public static void main(String[] args) 
     {
@@ -16,13 +17,15 @@ public class Main extends JFrame
     public Main()
     {
         super("Chess");
-        setSize(800,600);
+        setSize(810,600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(3);
         setVisible(true);
+        panel = new JPanel(null);
         add(panel);
-        new Board(panel);
+        board = SetBoard.setPieces(panel,board);
         panel.updateUI();
+
 
     }
 
