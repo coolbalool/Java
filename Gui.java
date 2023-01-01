@@ -253,7 +253,7 @@ public class Gui implements ActionListener {
     if (e.getSource() == loginButton) {
       loginPanel(true);
       if (userField.getText().equals(username))
-        if (passField.getText().equals(password)) {
+        if (charToString(passField.getPassword()).equals(password)) {
           loginLabel.setText("Login successfully");
           loginLabel.setForeground(Color.white);
         } else {
@@ -275,9 +275,9 @@ public class Gui implements ActionListener {
         loginLabel.setForeground(Color.white);
         loginPanel(true);
       } else {
-        if (!userField.getText().equals("") && !passField.getText().equals("")) {
+        if (!userField.getText().equals("") && !charToString(passField.getPassword()).equals("")) {
           username = userField.getText();
-          password = passField.getText();
+          password = charToString(passField.getPassword());
         } else {
           loginLabel.setText("Username or password cannot be blank");
           loginLabel.setForeground(Color.white);
@@ -319,4 +319,13 @@ public class Gui implements ActionListener {
       }
 
   }
+
+  private String charToString(char[] arr)
+  {
+    String s = "";
+    for (int i = 0; i < arr.length; i++)
+      s += arr[i];
+    return s;
+  }
+
 }
