@@ -1,10 +1,4 @@
 
-/* 
-    TODO LIST:
-    make multi files 
-    make code better 
-    
-*/
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
