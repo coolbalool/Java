@@ -17,7 +17,7 @@ public class SetBoard
             for (int j = 0; j < board.length; j++)
             {
 
-                board[i][j] = new Piece(new JButton(),Piece.Name.BLANK);
+                board[i][j] = new Piece(new JButton(),Piece.Name.BLANK,new Place(i,j));
                 board[i][j].button.setBounds(100*(i), 70*(j), 100, 70);
                 if(allEven(i, j)) board[i][j].button.setBackground(new Color(191, 181, 147));
                 else 
@@ -26,7 +26,7 @@ public class SetBoard
                     board[i][j].button.setForeground(Color.WHITE);
                 }
                 paintWhite = !paintWhite;
-                //board[i][j].addActionListener(new GameManager(board));
+                board[i][j].button.addActionListener(new BoardManager());
                 board[i][j].button.setVisible(true);
                 panel.add(board[i][j].button);
 
@@ -67,7 +67,7 @@ public class SetBoard
                 else if (j == board.length-1 && i == 4)
                 type = Piece.Name.W_K;
 
-                board[i][j] = new Piece(board[i][j].button,type);
+                board[i][j] = new Piece(board[i][j].button,type,board[i][j].place);
 
 
             }
