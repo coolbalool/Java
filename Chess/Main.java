@@ -24,6 +24,7 @@ public class Main extends JFrame
         panel = new JPanel(null);
         add(panel);
         board = SetBoard.setPieces(panel,board);
+        System.out.println(GameLogic.isLegal(board[3][1],board[3][2],board));
         panel.updateUI();
 
 

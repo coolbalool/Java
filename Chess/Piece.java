@@ -27,6 +27,13 @@ public class Piece
         }
     }
 
+    public Piece()
+    {
+        this.button = null;
+        this.type = Name.BLANK;
+        this.place = new Place();
+    }
+
     public enum Name
     {
         B_B,B_K,B_N,B_P,B_Q,B_R,W_B,W_K,W_N,W_P,W_Q,W_R,BLANK;    

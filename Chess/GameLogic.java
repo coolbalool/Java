@@ -5,28 +5,23 @@ import Chess.Piece.Name;
 public class GameLogic 
 {
  
-    public boolean isLegal(Piece p,Piece target, Piece[][] board)
+    public static boolean isLegal(Piece p,Piece target, Piece[][] board)
     {
         //pawn movement
         if (p.type == Piece.Name.W_P || p.type == Piece.Name.B_P)
-        isLegal(p, target, board);
+        isLegalPawn(p, target, board);
 
         return false;
     }
 
-    private boolean isLegalPawn(Piece p,Piece target, Piece[][] board)
+    private static boolean isLegalPawn(Piece p,Piece target, Piece[][] board)
     {
-        // pawn on first move can move 2 blocks 
-        if(p.type == Piece.Name.W_P && p.place.y == 1)
+        // normal move
+        if(p.place.y == 1 || p.place.y == 6)
         {
-            if (target.type == Name.BLANK && p.place.y + 2 == target.place.y)
-            {
-                
-            }
-        }
-        else if (p.type == Piece.Name.B_P && p.place.y == 6)
-        {
-
+            if (target.type == Name.BLANK && 
+            (Math.abs(p.place.y - target.place.y) == 1 || Math.abs(p.place.y - target.place.y) == 2))
+            return true;
         }
         return false;
     }
