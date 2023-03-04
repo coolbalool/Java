@@ -19,12 +19,7 @@ public class BoardManager implements ActionListener
         for (int j = 0; j < Main.board.length; j++)
             if (Main.board[i][j].button == e.getSource())
             {
-                if (GameLogic.lastPiece == null) GameLogic.lastPiece = Main.board[i][j];
-                else 
-                {
-                    Main.board[i][j] = new Piece(GameLogic.lastPiece.type);
-                    GameLogic.lastPiece = new Piece(null);
-                }
+                GameLogic.movePiece(Main.board[1][1],Main.board[3][5], false);
                 Main.panel.updateUI();
             }
     }

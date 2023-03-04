@@ -10,7 +10,6 @@ public class Piece
     
     public JButton button;
     public Name type;
-    public Place place;
 
     public Piece(Name type)
     {
@@ -37,20 +36,6 @@ public class Piece
             .getImage().getScaledInstance(button.getWidth(),button.getHeight(),Image.SCALE_DEFAULT)));
         
         }
-    }
-
-    public void setPlace()
-    {
-        for(int i = 0; i < Main.board.length; i++)
-            for(int j = 0; j < Main.board.length;j++)
-                if (this == Main.board[i][j]) place = new Place(i, j);
-    }
-
-    public Piece()
-    {
-        this.button = null;
-        this.type = Name.BLANK;
-        this.place = new Place();
     }
 
     public enum Name

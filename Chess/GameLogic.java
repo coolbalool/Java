@@ -7,25 +7,29 @@ public class GameLogic
  
     public static Piece lastPiece;
 
-    public static boolean isLegal(Piece p,Piece target)
+    public static int[] getLocation(Piece p)
     {
-        //pawn movement
-        if (p.type == Piece.Name.W_P || p.type == Piece.Name.B_P)
-        return isLegalPawn(p, target);
-
-        return false;
+        for (int i = 0; i < Main.board.length; i++)
+            for (int j = 0;  j < Main.board[i].length; j++)
+                if (Main.board[i][j] == p) 
+                {
+                    int[] cords = {i,j};
+                    return cords;
+                }
+        int[] err = {-1,-1};
+        System.err.println("Piece not found");
+        return err;
     }
 
-    private static boolean isLegalPawn(Piece p,Piece target)
+    public static void movePiece(Piece ogP,Piece newP,boolean swapPiece)
     {
-        // normal move
-        if(p.place.y == 1 || p.place.y == 6)
+        //int[] ogCords = getLocation(ogP);
+        //int[] newCords = getLocation(newP);
+        if (!swapPiece)
         {
-            if (target.type == Name.BLANK && 
-            (Math.abs(p.place.y - target.place.y) == 1 || Math.abs(p.place.y - target.place.y) == 2))
-            return true;
+            newP = new Piece(ogP.type);
+            ogP = new Piece(null);
         }
-        return false;
     }
 
 }
