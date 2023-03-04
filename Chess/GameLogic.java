@@ -5,16 +5,18 @@ import Chess.Piece.Name;
 public class GameLogic 
 {
  
-    public static boolean isLegal(Piece p,Piece target, Piece[][] board)
+    public static Piece lastPiece;
+
+    public static boolean isLegal(Piece p,Piece target)
     {
         //pawn movement
         if (p.type == Piece.Name.W_P || p.type == Piece.Name.B_P)
-        isLegalPawn(p, target, board);
+        return isLegalPawn(p, target);
 
         return false;
     }
 
-    private static boolean isLegalPawn(Piece p,Piece target, Piece[][] board)
+    private static boolean isLegalPawn(Piece p,Piece target)
     {
         // normal move
         if(p.place.y == 1 || p.place.y == 6)

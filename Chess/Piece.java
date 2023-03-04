@@ -12,19 +12,38 @@ public class Piece
     public Name type;
     public Place place;
 
-    public Piece(JButton button,Name type,Place place)
+    public Piece(Name type)
     {
-        this.button = button;
+        if (type == null) type = Name.BLANK;
         this.type = type;
-        this.place = place;
         if(type != Name.BLANK)
         {
-            
         button.setIcon(new ImageIcon(
             new ImageIcon("Chess/Pieces/" + type.toString() + ".png")
             .getImage().getScaledInstance(button.getWidth(),button.getHeight(),Image.SCALE_DEFAULT)));
         
         }
+    }
+
+    public Piece(JButton button,Name type)
+    {
+        this.button = button;
+        if (type == null) type = Name.BLANK;
+        this.type = type;
+        if(type != Name.BLANK)
+        {
+        button.setIcon(new ImageIcon(
+            new ImageIcon("Chess/Pieces/" + type.toString() + ".png")
+            .getImage().getScaledInstance(button.getWidth(),button.getHeight(),Image.SCALE_DEFAULT)));
+        
+        }
+    }
+
+    public void setPlace()
+    {
+        for(int i = 0; i < Main.board.length; i++)
+            for(int j = 0; j < Main.board.length;j++)
+                if (this == Main.board[i][j]) place = new Place(i, j);
     }
 
     public Piece()

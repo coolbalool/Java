@@ -6,8 +6,8 @@ import javax.swing.JPanel;
 public class Main extends JFrame
 {
 
-    private JPanel panel;
-    private Piece[][] board;
+    public static JPanel panel;
+    public static Piece[][] board;
 
     public static void main(String[] args) 
     {
@@ -23,8 +23,8 @@ public class Main extends JFrame
         setVisible(true);
         panel = new JPanel(null);
         add(panel);
-        board = SetBoard.setPieces(panel,board);
-        System.out.println(GameLogic.isLegal(board[3][1],board[3][2],board));
+        SetBoard.setPieces(panel);
+        System.out.println(GameLogic.isLegal(board[3][1],board[3][2]));
         panel.updateUI();
 
 
